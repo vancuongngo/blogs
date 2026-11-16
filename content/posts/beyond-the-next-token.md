@@ -16,7 +16,7 @@ Technically, this is true. But it is also like saying a car's purpose is "to mov
 
 As of 2026, the "next-token predictor" model is a **zeroth-order approximation**: a useful starting point, but incomplete. Modern LLMs are not just mimicking text; they are exploring, reasoning, and optimizing for rewards.
 
-This article breaks down the three stages of an LLM's life: **pre-training**, **weights & architecture**, and **post-training (RLVR)**, and explains why the "next-token" label no longer tells the whole story.
+This article breaks down the stages of an LLM's life: **pre-training**, **weights & architecture**, **post-training (RLVR)**, and **agentic use via tool calls**, and explains why the "next-token" label no longer tells the whole story.
 
 ## Part 1: Pre-training, learning language by imitation
 
@@ -118,15 +118,82 @@ Calling an LLM a "next-token predictor" is misleading because it describes the s
 
 Calling System B a "next-move predictor" is strange. It doesn't care whether the move looks like something a human played. It cares whether it wins.
 
+## Part 5: Agentic AI, from words to actions
+
+So far, we've discussed how LLMs think. But how do they act?
+
+### The core insight: text _is_ action for LLMs
+
+You might think: "LLMs only output text. They can't touch anything."
+
+But for an LLM, generating tokens is the only way it can "act." It has no hands, no database access, and no API keys by default. Its entire existence is confined to predicting the next string of characters. Therefore, any "decision" or "solution" it makes must be encoded into text.
+
+This makes LLMs remarkably similar to humans:
+
+- **Human:** problem → internal processing → speech or text (solution, decision).
+- **LLM:** prompt → weight calculation → token output (solution, decision).
+
+### The gap: text is ambiguous, actions are precise
+
+The problem with mapping raw text directly to actions is that natural language is messy.
+
+- If an LLM says _"I think we should delete the user account,"_ you cannot run `delete_user()` based on that sentence alone. Which user? Are you sure? What if it hallucinated?
+- If an LLM says `DELETE FROM users WHERE id = 5`, that is closer to an action, but still just a string.
+
+This is where the **Model Context Protocol (MCP)** comes in. MCP does not magically turn text into code. Instead, it provides a standardized format for the LLM to express its intent so that software can safely parse and execute it.
+
+### How MCP bridges the gap
+
+**Step 1: the tool definition (the contract).** Before the LLM ever generates a token, the system tells the LLM what tools exist. This is injected into the context window.
+
+```json
+{
+  "name": "get_weather",
+  "description": "Get current weather for a location",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "location": { "type": "string" },
+      "unit": { "enum": ["celsius", "fahrenheit"] }
+    },
+    "required": ["location"]
+  }
+}
+```
+
+**Step 2: the LLM generates structured tokens.** When the LLM decides to act, it doesn't just output free-form text like "It's raining in London." It predicts tokens that follow a specific structure (often JSON or XML tags) defined by the protocol.
+
+LLM output (raw tokens):
+
+```json
+{
+  "name": "get_weather",
+  "input": { "location": "London", "unit": "celsius" }
+}
+```
+
+**Step 3: the parser (not the LLM) executes.** The LLM stops here. It has done its job by generating the text. A separate piece of software (the MCP client/host) reads those tokens, parses the JSON, validates it against the schema, and then invokes the actual Python/Go/Rust function.
+
+**Step 4: feedback loop.** The result of the function (e.g. `{"temp": 12}`) is fed back into the LLM as new text tokens. The LLM then predicts the next tokens based on that new information.
+
+### Why this matters
+
+Your intuition is correct: LLMs are agents. But they are not autonomous agents in the sci-fi sense. They are **structured proposers**.
+
+- **Wrong way:** the LLM says "Turn on lights" and the system searches all methods for something related to "lights" and tries to guess which one to run. Too risky, prone to error.
+- **Right way (MCP):** the LLM is forced to output a specific key-value pair, `{"method": "home.lights.on"}`. The system looks up exactly that key. If the key doesn't exist, it errors out.
+
+LLMs are trained to become "precise humans" during post-training (specifically RLVR). They learn that outputting valid JSON/XML tool calls yields higher rewards than outputting vague prose when a task requires action.
+
 ## Conclusion: what are we actually building?
 
 Modern LLMs are not just text generators. They are:
 
 - **Compressed knowledge bases:** billions of weights encoding statistical relationships from the internet.
 - **Reasoning engines:** systems that use self-generated data and reward signals to discover strategies not present in the original training data.
-- **Optimizers:** tools designed to maximize specific outcomes (helpfulness, correctness, safety) rather than just mimic language.
+- **Agentic actors:** systems that translate internal reasoning into structured text requests, which are then executed by external tools via protocols like MCP.
 
-The "next-token" loop is still the interface we use to interact with them. But inside, they are doing something far more complex: simulating thought, exploring possibilities, and learning from their own mistakes.
+The "next-token" loop is still the interface we use to interact with them. But inside, they are doing something far more complex: simulating thought, exploring possibilities, and bridging the gap between digital thought and physical action.
 
 ## Glossary
 
@@ -139,6 +206,8 @@ The "next-token" loop is still the interface we use to interact with them. But i
 - **Bias:** a threshold value that helps neurons decide when to activate.
 - **Attention:** the mechanism that lets the model focus on relevant parts of the input sequence.
 - **Reward model:** a separate system that evaluates the quality of the LLM's output.
+- **MCP (Model Context Protocol):** a standardized protocol that allows LLMs to securely interact with external tools and data sources by generating structured requests (like JSON) that software can execute.
+- **Agentic AI:** the paradigm where LLMs are used not just to chat, but to plan and execute multi-step tasks using external tools.
 
 ## References
 
