@@ -70,7 +70,7 @@ export async function getPost(slug: string): Promise<Post> {
   const html = String(
     await unified()
       .use(remarkParse)
-      .use(remarkGfm)
+      .use(remarkGfm, { singleTilde: false }) // "~3 hours" must not become strikethrough
       .use(remarkRehype)
       .use(rehypeShiki, {
         themes: { light: "github-light", dark: "github-dark" },
