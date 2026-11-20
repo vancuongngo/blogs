@@ -10,6 +10,8 @@ An LLM like ChatGPT is a big math function that reads a list of text pieces (tok
 
 This article rewrites Andrej Karpathy's 3.5-hour video [Deep Dive into LLMs like ChatGPT](https://www.youtube.com/watch?v=7xTGNNLPyMI) as a readable guide. The numbers and model names are as of early 2025, when the video was made.
 
+Each section starts with **Watch in the video** links: click a timestamp to jump to that moment.
+
 A model is built in three stages, run one after the other, usually by separate teams:
 
 1. **Pre-training** — read a huge slice of the internet and learn to predict the next token. Output: a _base model_, an "internet text simulator". This is the expensive part: months, thousands of GPUs, millions of dollars.
@@ -28,6 +30,8 @@ The same next-token training runs in every stage; only the data changes.
 
 ## Stage 1: Pre-training — download the internet
 
+**Watch in the video:** [1:02 Download and filter the internet](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=62s)
+
 The first step is to collect a huge amount of good, varied text. Hugging Face's public FineWeb dataset is a typical example: after heavy filtering it is only about **44 TB** of text — it would almost fit on one hard drive. Big labs (OpenAI, Anthropic, Google) build their own version of the same thing.
 
 Most of the raw data comes from **Common Crawl**, a group that has crawled the web since 2007 (2.7 billion pages indexed by 2024). That raw data is cleaned in several steps:
@@ -41,6 +45,8 @@ Most of the raw data comes from **Common Crawl**, a group that has crawled the w
 What is left is just plain text from millions of web pages, like an article about tornadoes in 2012 or a medical page about adrenal glands. Glue it all together and you get one gigantic stream of text. The goal of pre-training is to train a neural network to copy the patterns in how that text flows.
 
 ## Tokenization — turning text into symbols
+
+**Watch in the video:** [7:48 Tokenization](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=468s)
 
 A neural network needs its input as a one-dimensional list of symbols, picked from a fixed set (the _vocabulary_). There is a trade-off: fewer kinds of symbols means longer lists, and list length is a precious, expensive resource. So we want more symbols and shorter lists.
 
@@ -63,6 +69,8 @@ You can play with this on the website Tiktokenizer (pick `cl100k_base`, the GPT-
 Think of token IDs as names, not numbers — like 100,000 different emojis. FineWeb's 44 TB becomes a sequence of about **15 trillion tokens**. That sequence is what the model learns from.
 
 ## Training the neural network — learn to guess the next token
+
+**Watch in the video:** [15:17 Training step](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=917s) · [20:12 Inside the network](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=1212s) · [34:50 A real training run and the loss](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=2090s) · [39:30 GPUs and data centers](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=2370s)
 
 Training is a simple game repeated trillions of times: show the network some tokens, ask what comes next, and nudge it toward the right answer.
 
@@ -113,6 +121,8 @@ Try to answer in your own words first. The answers are at the end of the article
 
 ## Inference and the base model — what you get after pre-training
 
+**Watch in the video:** [26:11 Inference](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=1571s) · [31:02 GPT-2](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=1862s) · [47:02 Playing with Llama 3.1 base](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=2822s) · [49:42 Knowledge as a lossy zip file](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=2982s) · [52:02 Reciting Wikipedia](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=3122s) · [54:16 Guessing past the cutoff](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=3256s) · [55:56 Few-shot prompt](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=3356s) · [57:17 Faking an assistant](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=3437s)
+
 **Inference** means generating text from a trained model. It is a loop:
 
 1. Feed in the tokens so far (the _prefix_), e.g. token 91.
@@ -144,6 +154,8 @@ To release a model you need two things: the code for the network (a few hundred 
 
 ## Stage 2: Supervised fine-tuning — turning the base model into an assistant
 
+**Watch in the video:** [1:00:21 Post-training](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=3621s) · [1:05:01 Conversations as tokens](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=3901s) · [1:10:13 InstructGPT and human labelers](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=4213s) · [1:16:53 What are you talking to?](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=4613s)
+
 To get an assistant, we keep training the base model with the exact same algorithm, but swap the internet data for a dataset of **conversations**. The model quickly learns how "the assistant" talks. Pre-training might take ~3 months on thousands of computers; this stage might take ~3 hours, because the dataset is much smaller.
 
 You cannot program the assistant's behavior in code. You program it **by example**: helpful answers, a friendly tone, and refusals for things it should not help with all come from examples in the data.
@@ -162,6 +174,8 @@ You cannot program the assistant's behavior in code. You program it **by example
 **So what are you talking to?** Not a magical AI that researched your question. Roughly, you are getting a **statistical simulation of a skilled human labeler** following the company's instructions. Ask for the top Paris landmarks: if that question is in the training data, you will likely get something close to what that labeler wrote after ~20 minutes of research. If not, the model mixes its pre-training knowledge with the labeler style it learned.
 
 ## LLM psychology — hallucinations, memory and "self"
+
+**Watch in the video:** [1:20:33 Hallucinations](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=4833s) · [1:26:11 Meta's fix](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=5171s) · [1:32:27 Tools and web search](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=5547s) · [1:39:34 Two kinds of memory](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=5974s) · [1:41:47 Sense of self](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=6107s)
 
 ### Why models hallucinate
 
@@ -202,6 +216,8 @@ Either way, the identity is bolted on, not deeply there like in a person.
 
 ## Models need tokens to think
 
+**Watch in the video:** [1:46:57 Models need tokens to think](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=6417s) · [1:55:50 Use code](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=6950s) · [1:58:24 Counting](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=7104s) · [2:01:11 Spelling](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=7271s) · [2:05:14 9.11 vs 9.9](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=7514s)
+
 Each new token is produced by one pass through the network. A modern network has maybe ~100 layers, so the amount of computation per token is **small and roughly fixed**. The model cannot do an arbitrarily hard calculation inside a single token. Real reasoning has to be **spread across many tokens**.
 
 **Example.** "Emily buys 3 apples and 2 oranges. Each orange costs $2. The total is $13. What does each apple cost?" Two training answers both end in $3:
@@ -223,6 +239,8 @@ Those step-by-step lines in ChatGPT's answers are not just for you — they are 
 Takeaway: treat the model as a powerful but random-in-places tool. Use it, but check its work.
 
 ## Stage 3: Reinforcement learning — practice problems
+
+**Watch in the video:** [2:10:03 Reinforcement learning](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=7803s) · [2:11:09 The textbook analogy](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=7869s) · [2:20:21 RL in action](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=8421s) · [2:28:52 DeepSeek R1](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=8932s) · [2:33:00 Thinking models](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=9180s) · [2:42:07 AlphaGo and move 37](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=9727s)
 
 **Why SFT is not enough.** For the apple problem, which written solution is best _for the model_? A human labeler cannot really know. A step that is easy for us might be too big a leap for the model; steps we spell out might be trivial for it and waste tokens. The model also knows things we don't, and vice versa. Our cognition is different from its cognition. So the model should **find for itself** which token sequences reliably reach the right answer.
 
@@ -249,6 +267,8 @@ With LLMs we are only seeing the first hints of this. In principle, RL could fin
 
 ## RLHF — RL when there is no right answer
 
+**Watch in the video:** [2:48:26 Unverifiable domains](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=10106s) · [2:53:42 Training the reward model](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=10422s) · [2:58:56 Upside](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=10736s) · [3:00:45 Downside: gaming the reward](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=10845s)
+
 Math and code are _verifiable_: you can check the answer automatically. Jokes, poems and summaries are not. "Write a joke about pelicans" has no answer key.
 
 You could have humans score every attempt, but the numbers explode. With 1,000 updates × 1,000 prompts × 1,000 attempts each, people would have to read **1 billion** pelican jokes.
@@ -270,6 +290,8 @@ So RLHF runs only for a limited number of steps, then you stop and ship. Karpath
 
 ## What's coming, and where to find models
 
+**Watch in the video:** [3:09:50 What's coming](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=11390s) · [3:15:05 Staying up to date](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=11705s) · [3:18:35 Where to run models](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=11915s)
+
 **Coming next (as predicted in early 2025):**
 
 - **Multimodal models.** Audio and images get turned into tokens too (slices of an audio spectrogram, small patches of an image), so the same methods apply. Models will hear, speak, see and draw natively.
@@ -289,6 +311,8 @@ So RLHF runs only for a limited number of steps, then you stop and ship. Karpath
 | A model on your own laptop | LM Studio, with smaller "distilled" models at lower precision |
 
 ## Putting it together — what happens when you hit Enter
+
+**Watch in the video:** [3:21:43 Summary](https://www.youtube.com/watch?v=7xTGNNLPyMI&t=12103s)
 
 1. Your message is put into the chat format and becomes a sequence of tokens.
 2. The model continues the sequence, one token at a time, sampling from probabilities.

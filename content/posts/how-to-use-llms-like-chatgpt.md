@@ -8,13 +8,19 @@ summary: "Andrej Karpathy's \"How I use LLMs\" in plain language: what you are a
 
 ## The big idea
 
+_Watch:_ [0:00 · Intro into the growing LLM ecosystem](https://youtu.be/EWvNQjAaOHw?t=0)
+
 A chatbot like ChatGPT is, at its core, a big compressed file of the internet that predicts the next piece of text. Everything else — search, code, voice, images — is a tool bolted on around it.
 
 This article is a plain-language write-up of Andrej Karpathy's video [How I use LLMs](https://www.youtube.com/watch?v=EWvNQjAaOHw) (early 2025). His earlier video explained how these models are built; this one is practical: which features exist, when to use each, and what to watch out for.
 
 Note: the video was filmed in early 2025. Model names, prices and which app has which feature change fast, so treat those details as examples, not current facts. The way of thinking is what lasts.
 
+Each section has a **Watch** link that opens the video at the start of that chapter, using the chapter times from the video's description. The point discussed is somewhere inside that chapter.
+
 ## What you are actually talking to
+
+_Watch:_ [2:54 · ChatGPT interaction under the hood](https://youtu.be/EWvNQjAaOHw?t=174)
 
 The chat bubbles are an illusion. Under the hood, you and the model are writing into one long line of text chunks called **tokens**.
 
@@ -53,11 +59,15 @@ By default it has **no tools**: no calculator, no web, no code runner. Just toke
 
 ### When is it fine to trust it without tools?
 
+_Watch:_ [13:12 · Basic LLM interactions examples](https://youtu.be/EWvNQjAaOHw?t=792)
+
 His rule: the info is (a) **not recent**, (b) **common on the internet**, and (c) **not high stakes**. Example: asking which ingredients in DayQuil/NyQuil help a runny nose. He still checked the box to confirm. Always treat answers as a good first draft, not guaranteed truth.
 
 ## Three good habits
 
 ### 1. Start a new chat when you change topic
+
+_Watch:_ [13:12 · Basic LLM interactions examples](https://youtu.be/EWvNQjAaOHw?t=792) (the new-chat tip comes near the end of this chapter)
 
 Tokens in the context window cost you in two ways:
 
@@ -67,6 +77,8 @@ Tokens in the context window cost you in two ways:
 Keep the window short and on-topic. Keep old text only if it helps the current task.
 
 ### 2. Know which model you are using
+
+_Watch:_ [18:03 · Be aware of the model you're using, pricing tiers](https://youtu.be/EWvNQjAaOHw?t=1083)
 
 Bigger models know more, write better and make up fewer facts. Smaller models are cheaper and dumber. Companies charge more for the big ones. ChatGPT tiers at the time of the video:
 
@@ -80,11 +92,15 @@ If you are logged out, you may not even be told which model answers. If you use 
 
 ### 3. Use an "LLM council"
 
+_Watch:_ [18:03 · Be aware of the model you're using, pricing tiers](https://youtu.be/EWvNQjAaOHw?t=1083) (the council idea comes near the end of this chapter)
+
 Karpathy pays for several apps and asks them all the same question — e.g. "a cool city to visit". (Both Claude and Gemini suggested Zermatt, and he went.) Comparing answers shows where they agree and where one is off.
 
 The main players he mentions: **ChatGPT** (OpenAI, the first and most feature-rich), **Gemini** (Google), **Copilot** (Microsoft), **Meta AI**, **Claude** (Anthropic), **Grok** (xAI), **DeepSeek** (China), **Le Chat** (Mistral, France). Leaderboards like Chatbot Arena and Scale's SEAL rank them.
 
 ## Thinking models
+
+_Watch:_ [22:54 · Thinking models and when to use them](https://youtu.be/EWvNQjAaOHw?t=1374)
 
 Thinking models spend extra time "thinking out loud" before answering. This makes them much more accurate on hard math, code and logic — but slower.
 
@@ -112,6 +128,8 @@ How to find it: OpenAI's models starting with "o" (o1, o3-mini…) were thinking
 
 ### How a tool works (the mechanism)
 
+_Watch:_ [31:00 · Tool use: internet search](https://youtu.be/EWvNQjAaOHw?t=1860)
+
 The model is trained to output a special token that means "search the internet for X". When the app sees it, it:
 
 1. Pauses the model.
@@ -137,6 +155,8 @@ Some models search on their own when they sense the question is recent. Others n
 
 ### Deep research = search + thinking, for a long time
 
+_Watch:_ [42:04 · Tool use: deep research](https://youtu.be/EWvNQjAaOHw?t=2524)
+
 Deep research runs for **~5–30 minutes**. It does many searches, reads many papers and pages, thinks, and writes a report with citations — like a custom research paper.
 
 Example: he asked about **Ca-AKG** (2.5 g per serving in Bryan Johnson's longevity mix): why it's included, evidence in humans and animals, how it might work, safety concerns. ChatGPT thought for 5 minutes, read 27 sources, and reported on studies in worms, fruit flies and mice, ongoing human trials, mechanism and safety.
@@ -150,6 +170,8 @@ At the time, ChatGPT's version (Pro tier only) was the most thorough. Perplexity
 **Rule: treat the report as a first draft.** It can still invent or misread things. Use the citations to go read the real sources.
 
 ## Giving it your own documents
+
+_Watch:_ [50:57 · File uploads, adding documents to context](https://youtu.be/EWvNQjAaOHw?t=3057)
 
 Uploading a file does the same thing as search: it puts real text into the context window, so the model reads it instead of relying on fuzzy memory.
 
@@ -177,6 +199,8 @@ He finds this greatly improves his understanding and memory, and makes hard text
 
 ### The Python interpreter
 
+_Watch:_ [59:00 · Tool use: Python interpreter, messiness of the ecosystem](https://youtu.be/EWvNQjAaOHw?t=3540)
+
 Same trick as search: the model outputs special tokens meaning "run this program". The app runs the code and pastes the result back into the context window.
 
 Why it matters: the model does math "in its head" by memory-like pattern matching, not real calculation.
@@ -189,6 +213,8 @@ Why it matters: the model does math "in its head" by memory-like pattern matchin
 Lesson: **know which apps have a code tool.** Without one, the model will still give you a confident answer, which may be made up.
 
 ### Advanced Data Analysis (ChatGPT)
+
+_Watch:_ [1:04:35 · ChatGPT Advanced Data Analysis, figures, plots](https://youtu.be/EWvNQjAaOHw?t=3875)
 
 This turns ChatGPT into a **junior data analyst**: it collects data, writes code, and draws charts. His example:
 
@@ -205,11 +231,15 @@ So: powerful, but **read and check the code**. Don't use it if you can't verify 
 
 ### Claude Artifacts
 
+_Watch:_ [1:09:00 · Claude Artifacts, apps, diagrams](https://youtu.be/EWvNQjAaOHw?t=4140)
+
 Claude can write a small web app and run it right in the chat. Example: make 20 flashcards from the Adam Smith Wikipedia intro, then "use Artifacts to build a flashcard app". Claude wrote a React app with flip, correct/wrong and shuffle. No server or database — it runs in your browser.
 
 His favourite use: **diagrams**. "Create a conceptual diagram of this chapter" → Claude writes Mermaid code and draws a tree of the chapter's argument (e.g. division of labour ↔ size of the market ↔ water vs land transport). Great for visual thinkers.
 
 ### Coding apps: Cursor and "vibe coding"
+
+_Watch:_ [1:14:02 · Cursor: Composer, writing code](https://youtu.be/EWvNQjAaOHw?t=4442)
 
 For real programming he does **not** paste code into a chat website — it lacks context. He uses an app like **Cursor** (others: VS Code, Windsurf) that works with the files on his computer and calls Claude through an API.
 
@@ -229,6 +259,8 @@ The key idea: audio and images can also be cut into tokens. The core model doesn
 
 ### Voice: "fake audio" vs "true audio"
 
+_Watch:_ [1:22:28 · Audio (speech) input/output](https://youtu.be/EWvNQjAaOHw?t=4948) · [1:27:37 · Advanced Voice Mode, true audio](https://youtu.be/EWvNQjAaOHw?t=5257)
+
 |  | Fake audio | True audio |
 | --- | --- | --- |
 | How it works | Speech → text → model → text → speech, using separate models | The model itself hears and speaks in **audio tokens** |
@@ -243,7 +275,11 @@ He found ChatGPT's advanced voice too cautious (it refused to make a fox sound).
 
 **NotebookLM** (Google): upload papers or pages, then press generate to get a custom ~30-minute **two-host podcast** about them. You can steer it with instructions and even interrupt with questions. Good for niche topics while walking or driving.
 
+_Watch:_ [1:37:09 · NotebookLM, podcast generation](https://youtu.be/EWvNQjAaOHw?t=5829)
+
 ### Images in
+
+_Watch:_ [1:40:20 · Image input, OCR](https://youtu.be/EWvNQjAaOHw?t=6020)
 
 You can paste a picture and ask about it. Images are cut into a grid of patches, and each patch becomes a token.
 
@@ -259,9 +295,14 @@ Mac shortcut: **Ctrl+Shift+Cmd+4** to copy a screen region, then paste into the 
 
 ### Images out
 
+_Watch:_ [1:47:02 · Image output, DALL-E, Ideogram](https://youtu.be/EWvNQjAaOHw?t=6422)
+
 ChatGPT used **DALL·E 3** (others: Ideogram). He uses it for YouTube thumbnails and icons. At the time, the chat model wrote a caption and a _separate_ image model drew it — not done natively.
 
 ### Video
+
+_Watch:_ [1:49:14 · Video input, point and talk](https://youtu.be/EWvNQjAaOHw?t=6554) · [1:52:23 · Video output, Sora, Veo 2](https://youtu.be/EWvNQjAaOHw?t=6743)
+
 
 In the ChatGPT phone app's advanced voice, you can turn on the camera and talk about what you see. It identified books, a CO₂ monitor (713 ppm — fine, aim below 800), and a Middle-earth map. It likely samples about one image per second. He suggests this for parents and grandparents: just point and ask.
 
@@ -273,9 +314,13 @@ All three of these work the same way underneath: **saved text that gets pasted i
 
 ### Memory
 
+_Watch:_ [1:53:29 · ChatGPT memory, custom instructions](https://youtu.be/EWvNQjAaOHw?t=6809)
+
 Normally each new chat starts empty. ChatGPT's memory saves short notes about you (e.g. "thinks late 1990s–early 2000s was peak Hollywood") into a list. That list is added to the start of every chat. Sometimes it saves on its own; sometimes you must say "please remember this". You can view, edit and delete the notes. Over time it gets to know you — he says it helps with things like movie picks.
 
 ### Custom instructions
+
+_Watch:_ [1:53:29 · ChatGPT memory, custom instructions](https://youtu.be/EWvNQjAaOHw?t=6809) (custom instructions come after memory in this chapter)
 
 A settings box for how you want it to behave in every chat. His:
 
@@ -284,6 +329,8 @@ A settings box for how you want it to behave in every chat. His:
 - For Korean: use one specific level of politeness by default.
 
 ### Custom GPTs (saved prompts)
+
+_Watch:_ [1:58:38 · Custom GPTs](https://youtu.be/EWvNQjAaOHw?t=7118)
 
 A custom GPT is just a saved prompt. Nothing magical. It saves you from retyping a long setup each time. He mostly uses them for learning Korean:
 
@@ -301,6 +348,8 @@ In each custom GPT he writes a short description **plus several worked examples*
 Few-shot is almost always more accurate — just like teaching a person by showing, not only telling.
 
 ## Cheat sheet: what to reach for
+
+_Watch:_ [2:06:30 · Summary](https://youtu.be/EWvNQjAaOHw?t=7590)
 
 | You want to… | Use | Watch out for |
 | --- | --- | --- |
